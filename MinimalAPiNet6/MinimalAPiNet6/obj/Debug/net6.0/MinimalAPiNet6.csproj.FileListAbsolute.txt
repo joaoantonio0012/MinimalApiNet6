@@ -3,6 +3,7 @@ C:\Users\JOAO\Desktop\MinimalApi\MinimalAPiNet6\MinimalAPiNet6\obj\Debug\net6.0\
 C:\Users\JOAO\Desktop\MinimalApi\MinimalAPiNet6\MinimalAPiNet6\obj\Debug\net6.0\MinimalAPiNet6.AssemblyInfoInputs.cache
 C:\Users\JOAO\Desktop\MinimalApi\MinimalAPiNet6\MinimalAPiNet6\obj\Debug\net6.0\MinimalAPiNet6.AssemblyInfo.cs
 C:\Users\JOAO\Desktop\MinimalApi\MinimalAPiNet6\MinimalAPiNet6\obj\Debug\net6.0\MinimalAPiNet6.csproj.CoreCompileInputs.cache
+C:\Users\JOAO\Desktop\MinimalApi\MinimalAPiNet6\MinimalAPiNet6\obj\Debug\net6.0\MinimalAPiNet6.MvcApplicationPartsAssemblyInfo.cs
 C:\Users\JOAO\Desktop\MinimalApi\MinimalAPiNet6\MinimalAPiNet6\obj\Debug\net6.0\MinimalAPiNet6.MvcApplicationPartsAssemblyInfo.cache
 C:\Users\JOAO\Desktop\MinimalApi\MinimalAPiNet6\MinimalAPiNet6\bin\Debug\net6.0\appsettings.Development.json
 C:\Users\JOAO\Desktop\MinimalApi\MinimalAPiNet6\MinimalAPiNet6\bin\Debug\net6.0\appsettings.json
@@ -30,10 +31,17 @@ C:\Users\JOAO\Desktop\MinimalApi\MinimalAPiNet6\MinimalAPiNet6\bin\Debug\net6.0\
 C:\Users\JOAO\Desktop\MinimalApi\MinimalAPiNet6\MinimalAPiNet6\bin\Debug\net6.0\Microsoft.IdentityModel.Protocols.dll
 C:\Users\JOAO\Desktop\MinimalApi\MinimalAPiNet6\MinimalAPiNet6\bin\Debug\net6.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
 C:\Users\JOAO\Desktop\MinimalApi\MinimalAPiNet6\MinimalAPiNet6\bin\Debug\net6.0\Microsoft.IdentityModel.Tokens.dll
+C:\Users\JOAO\Desktop\MinimalApi\MinimalAPiNet6\MinimalAPiNet6\bin\Debug\net6.0\Microsoft.OpenApi.dll
 C:\Users\JOAO\Desktop\MinimalApi\MinimalAPiNet6\MinimalAPiNet6\bin\Debug\net6.0\Microsoft.Win32.SystemEvents.dll
+C:\Users\JOAO\Desktop\MinimalApi\MinimalAPiNet6\MinimalAPiNet6\bin\Debug\net6.0\Newtonsoft.Json.dll
+C:\Users\JOAO\Desktop\MinimalApi\MinimalAPiNet6\MinimalAPiNet6\bin\Debug\net6.0\Serilog.dll
 C:\Users\JOAO\Desktop\MinimalApi\MinimalAPiNet6\MinimalAPiNet6\bin\Debug\net6.0\SQLitePCLRaw.batteries_v2.dll
 C:\Users\JOAO\Desktop\MinimalApi\MinimalAPiNet6\MinimalAPiNet6\bin\Debug\net6.0\SQLitePCLRaw.core.dll
 C:\Users\JOAO\Desktop\MinimalApi\MinimalAPiNet6\MinimalAPiNet6\bin\Debug\net6.0\SQLitePCLRaw.provider.e_sqlite3.dll
+C:\Users\JOAO\Desktop\MinimalApi\MinimalAPiNet6\MinimalAPiNet6\bin\Debug\net6.0\Swashbuckle.AspNetCore.Annotations.dll
+C:\Users\JOAO\Desktop\MinimalApi\MinimalAPiNet6\MinimalAPiNet6\bin\Debug\net6.0\Swashbuckle.AspNetCore.Swagger.dll
+C:\Users\JOAO\Desktop\MinimalApi\MinimalAPiNet6\MinimalAPiNet6\bin\Debug\net6.0\Swashbuckle.AspNetCore.SwaggerGen.dll
+C:\Users\JOAO\Desktop\MinimalApi\MinimalAPiNet6\MinimalAPiNet6\bin\Debug\net6.0\Swashbuckle.AspNetCore.SwaggerUI.dll
 C:\Users\JOAO\Desktop\MinimalApi\MinimalAPiNet6\MinimalAPiNet6\bin\Debug\net6.0\System.Configuration.ConfigurationManager.dll
 C:\Users\JOAO\Desktop\MinimalApi\MinimalAPiNet6\MinimalAPiNet6\bin\Debug\net6.0\System.Drawing.Common.dll
 C:\Users\JOAO\Desktop\MinimalApi\MinimalAPiNet6\MinimalAPiNet6\bin\Debug\net6.0\System.IdentityModel.Tokens.Jwt.dll
@@ -77,11 +85,3 @@ C:\Users\JOAO\Desktop\MinimalApi\MinimalAPiNet6\MinimalAPiNet6\obj\Debug\net6.0\
 C:\Users\JOAO\Desktop\MinimalApi\MinimalAPiNet6\MinimalAPiNet6\obj\Debug\net6.0\MinimalAPiNet6.pdb
 C:\Users\JOAO\Desktop\MinimalApi\MinimalAPiNet6\MinimalAPiNet6\obj\Debug\net6.0\MinimalAPiNet6.genruntimeconfig.cache
 C:\Users\JOAO\Desktop\MinimalApi\MinimalAPiNet6\MinimalAPiNet6\obj\Debug\net6.0\ref\MinimalAPiNet6.dll
-C:\Users\JOAO\Desktop\MinimalApi\MinimalAPiNet6\MinimalAPiNet6\bin\Debug\net6.0\Microsoft.OpenApi.dll
-C:\Users\JOAO\Desktop\MinimalApi\MinimalAPiNet6\MinimalAPiNet6\bin\Debug\net6.0\Swashbuckle.AspNetCore.Swagger.dll
-C:\Users\JOAO\Desktop\MinimalApi\MinimalAPiNet6\MinimalAPiNet6\bin\Debug\net6.0\Swashbuckle.AspNetCore.SwaggerGen.dll
-C:\Users\JOAO\Desktop\MinimalApi\MinimalAPiNet6\MinimalAPiNet6\bin\Debug\net6.0\Swashbuckle.AspNetCore.SwaggerUI.dll
-C:\Users\JOAO\Desktop\MinimalApi\MinimalAPiNet6\MinimalAPiNet6\obj\Debug\net6.0\MinimalAPiNet6.MvcApplicationPartsAssemblyInfo.cs
-C:\Users\JOAO\Desktop\MinimalApi\MinimalAPiNet6\MinimalAPiNet6\bin\Debug\net6.0\Newtonsoft.Json.dll
-C:\Users\JOAO\Desktop\MinimalApi\MinimalAPiNet6\MinimalAPiNet6\bin\Debug\net6.0\Serilog.dll
-C:\Users\JOAO\Desktop\MinimalApi\MinimalAPiNet6\MinimalAPiNet6\bin\Debug\net6.0\Swashbuckle.AspNetCore.Annotations.dll

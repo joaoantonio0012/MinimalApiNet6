@@ -1,15 +1,15 @@
-﻿ 
+﻿
 using Microsoft.EntityFrameworkCore;
 using MinimalAPiNet6.Models;
 
-namespace MinimalAPiNet6.Contexto;
+namespace MinimalAPiNet6.Data;
 
 public class Contexto : DbContext
 {
 
     public Contexto(DbContextOptions<Contexto> options) : base(options)
     {
-        Database.EnsureCreated();   
+        Database.EnsureCreated();
 
     }
     public DbSet<EmpresaModel> Empresas { get; set; }
@@ -17,7 +17,7 @@ public class Contexto : DbContext
     public DbSet<CargaModel> Cargas { get; set; }
 
     protected override void OnModelCreating(ModelBuilder Mb)
-    { 
+    {
         //Mb.Entity<EmpresaModel>().HasKey(e => e.Id);
 
         //Mb.Entity<EmpresaModel>().Property(e => e.NomeFantasia).HasMaxLength(100);

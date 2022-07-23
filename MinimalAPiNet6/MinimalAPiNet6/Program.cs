@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using MinimalAPiNet6.Contexto;
+using MinimalAPiNet6.Data;
 using Newtonsoft.Json;
 using Serilog.Context;
 using Swashbuckle.AspNetCore.Annotations;
@@ -14,7 +14,7 @@ builder.Services.AddDbContext<Contexto>(option =>option.UseSqlite(conn));
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(); 
-
+ 
 var app = builder.Build(); 
 
 app.UseSwagger();
