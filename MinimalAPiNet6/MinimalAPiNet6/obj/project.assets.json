@@ -8705,7 +8705,8 @@
       "Newtonsoft.Json >= 13.0.1",
       "Serilog >= 2.11.0",
       "Swashbuckle.AspNetCore >= 6.4.0",
-      "Swashbuckle.AspNetCore.Annotations >= 6.4.0"
+      "Swashbuckle.AspNetCore.Annotations >= 6.4.0",
+      "Swashbuckle.AspNetCore.Swagger >= 6.4.0"
     ]
   },
   "packageFolders": {
@@ -8811,6 +8812,10 @@
             "version": "[6.4.0, )"
           },
           "Swashbuckle.AspNetCore.Annotations": {
+            "target": "Package",
+            "version": "[6.4.0, )"
+          },
+          "Swashbuckle.AspNetCore.Swagger": {
             "target": "Package",
             "version": "[6.4.0, )"
           }

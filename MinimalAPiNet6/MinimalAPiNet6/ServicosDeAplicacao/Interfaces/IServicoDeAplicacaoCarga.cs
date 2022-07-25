@@ -5,6 +5,7 @@ namespace MinimalAPiNet6.ServicosDeAplicacao.ServicosDeAplicacao
 {
     public interface IServicoDeAplicacaoCarga : _IServicosDeAplicacaoBase<CargaModel>
     {
+        public bool AlterarCargaParaEntradaAutorizada(int cargaId, string nomePorteiro, int CancelaEntrada);
 
     }
 }

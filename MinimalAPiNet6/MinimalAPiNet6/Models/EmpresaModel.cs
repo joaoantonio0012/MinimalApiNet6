@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace MinimalAPiNet6.Models;
 
@@ -9,9 +10,10 @@ public class EmpresaModel: _ModelBase
     public string NomeFantasia { get; set; }
     public string RazaoSocial { get; set; }
     public string CpfCnpj       { get; set; }
-    [NotMapped]
+    [JsonIgnore ]
     public ICollection <CargaModel>? Cargas { get; set; }
-    [NotMapped]
+    [JsonIgnore]
+
     public ICollection <ArmazemModel>? Armazens { get; set; }
 
 }

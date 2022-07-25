@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace MinimalAPiNet6.Models;
 
@@ -6,9 +7,11 @@ namespace MinimalAPiNet6.Models;
 public class CargaModel : _ModelBase
 {
 
+    [JsonIgnore]
     public EmpresaModel Empresa { get; set; }
     public int EmpresaId { get; set; }
 
+    [JsonIgnore]
     public ArmazemModel Armazem { get; set; }
     public int ArmazemId { get; set; }
 

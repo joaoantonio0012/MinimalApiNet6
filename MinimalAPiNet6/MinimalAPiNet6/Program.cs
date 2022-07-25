@@ -1,6 +1,9 @@
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.OpenApi.Models;
+
 using MinimalAPiNet6.Data;
 using MinimalAPiNet6.Models;
 using MinimalAPiNet6.ServicosDeAplicacao.Interfaces;
@@ -9,77 +12,192 @@ using MinimalAPiNet6.ServicosDeRepositorio.Interfaces;
 using MinimalAPiNet6.ServicosDeRepositorio.Repositorios;
 using Newtonsoft.Json;
 using Serilog.Context;
+using Swashbuckle.AspNetCore;
 using Swashbuckle.AspNetCore.Annotations;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
 var conn = builder.Configuration.GetConnectionString("DefautConnectionString");
 
-builder.Services.AddDbContext<Contexto>(option =>option.UseSqlite(conn));
+builder.Services.AddDbContext<Contexto>(option => option.UseSqlite(conn));
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 
 
-builder.Services.AddScoped(serviceType:typeof(_IRepositorioBase<>),implementationType: typeof(_RepositorioBase<>));
+
+builder.Services.AddScoped(serviceType: typeof(_IRepositorioBase<>), implementationType: typeof(_RepositorioBase<>));
 builder.Services.AddScoped<IRepositorioEmpresa, RepositorioEmpresa>();
-//builder.Services.AddScoped<IRepositorioCarga, RepositorioCarga>();
-//builder.Services.AddScoped<IRepositorioArmazem, RepositorioArmazem>();
- 
-builder.Services.AddScoped(serviceType:typeof(_IServicosDeAplicacaoBase<>),implementationType: typeof(_ServicoDeAplicacaoBase<>));
+builder.Services.AddScoped<IRepositorioCarga, RepositorioCarga>();
+builder.Services.AddScoped<IRepositorioArmazem, RepositorioArmazem>();
+
+builder.Services.AddScoped(serviceType: typeof(_IServicosDeAplicacaoBase<>), implementationType: typeof(_ServicoDeAplicacaoBase<>));
 builder.Services.AddScoped<IServicoDeAplicacaoEmpresa, ServicoDeAplicacaoEmpresa>();
-//builder.Services.AddScoped<IServicoDeAplicacaoArmazem, ServicoDeAplicacaoArmazem>();
-//builder.Services.AddScoped<IServicoDeAplicacaoCarga, ServicoDeAplicacaoCarga>();
+builder.Services.AddScoped<IServicoDeAplicacaoArmazem, ServicoDeAplicacaoArmazem>();
+builder.Services.AddScoped<IServicoDeAplicacaoCarga, ServicoDeAplicacaoCarga>();
 
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "Armazém API",
+        Version = "v1",
+        Description = "Api para controle de armazém",
+        TermsOfService = new Uri("https://github.com/joaoantonio0012/MinimalApiNet6"),
+        Contact = new OpenApiContact
+        {
+            Name = "João Antonio Amaro Pereira",
+            Email = "joaoantonioamaro@hotmail.com",
+            Url = new Uri("https://www.linkedin.com/in/joaoantonioamaro"),
+        }
+    });
 
-var app = builder.Build(); 
-
+    c.EnableAnnotations();
+});
+var app = builder.Build();
 app.UseSwagger();
 app.UseSwaggerUI();
- 
 
-app.MapGet("/GetDados", (IServicoDeAplicacaoEmpresa servico) => {
+// Minimal APi Metodos endpoints
 
-    EmpresaModel empresa = new EmpresaModel {
-        NomeFantasia = "Minerio",
-        CpfCnpj = "123456789",
-        Id = 0,
-        RazaoSocial = "Sistemas",
-        DataDeCadastro = DateTime.UtcNow.Date,
-        
-    };
 
-   return new  OkObjectResult( servico.Cadastrar(empresa));
+app.MapPost("/CadastrarEmpresa",
+[SwaggerOperation(Summary = "Cadastrar Empresa.", Description = "Método responsavel por cadastrar nova empresa")]
+(EmpresaModel empresa, IServicoDeAplicacaoEmpresa servico) =>
+    {
+        var retorno = servico.Cadastrar(empresa);
 
-} );
+        if (retorno != null)
+            return Results.Ok(retorno);
 
-app.MapGet("/GetByName", (string nome, IServicoDeAplicacaoEmpresa servico) => {
+        return Results.BadRequest("Erro ao cadastrar");
+    });
 
-     
-   return new  OkObjectResult( servico.Recuperar(c => c.NomeFantasia.Contains(nome)));
+app.MapPost("/CadastrarArmazem",
+[SwaggerOperation(Summary = "Cadastrar Armazem.", Description = "Método responsavel por cadastrar novo Armazem")]
+(ArmazemModel armazem, IServicoDeAplicacaoArmazem servico) =>
+    {
+        var retorno = servico.Cadastrar(armazem);
 
-} );
+        if (retorno != null)
+            return Results.Ok(retorno);
 
-app.MapDelete("/Excluir", (int Id, IServicoDeAplicacaoEmpresa servico) => {
+        return Results.BadRequest("Erro ao cadastrar");
+    });
 
-     
-   return new  OkObjectResult( servico.Excluir(Id));
+app.MapPost("/CadastrarCarga",
+[SwaggerOperation(Summary = "Cadastrar Carga.", Description = "Método responsavel por cadastrar nova carga")]
+(CargaModel carga, IServicoDeAplicacaoCarga servico) =>
+    {
+        var retorno = servico.Cadastrar(carga);
 
-} );
+        if (retorno != null)
+            return Results.Ok(retorno);
 
-app.MapPost("/security/create",
-        [EnableCors("CorsPolicy")][SwaggerOperation(Summary = "Criar uauário.", Description = "Método responsavel por criar usuário")]
-[ProducesResponseType(typeof(  object ), StatusCodes.Status200OK)]
-[ProducesResponseType(typeof( object ), StatusCodes.Status400BadRequest)]
-[ProducesResponseType(typeof( object ), StatusCodes.Status500InternalServerError)]
-async (string teste ) =>
-        {
-            using (LogContext.PushProperty("Controller", "UserController"))
-            using (LogContext.PushProperty("Payload", JsonConvert.SerializeObject(teste)))
-            using (LogContext.PushProperty("Metodo", "Create"))
-            {
-                return await Task.FromResult (new OkObjectResult("ok"));
-            }
-        });
+        return Results.BadRequest("Erro ao cadastrar");
+    });
+
+app.MapGet("/ConferirCargaNaEntradaDoArmazem",
+[SwaggerOperation(Summary = "Localizar Carga.", Description = "Método responsavel por verificar existencia de carga cadastrada no sistema")]
+(string placa, string cpfcnpjMotorista, int tipoDeCarga,  IServicoDeAplicacaoCarga servico) =>
+    {
+        var retorno  = servico.Recuperar(c => c.Placa.Equals(placa) && c.CpfMotorista.Equals(cpfcnpjMotorista) && c.TipoDeCarga.Equals(tipoDeCarga)  ).FirstOrDefault();
+
+        if (retorno!= null)
+            return Results.Ok(retorno);
+         
+        return Results.BadRequest("Carga não encontrada no sistema");
+    });
+
+app.MapGet("/GetCarga",
+[SwaggerOperation(Summary = "Localizar Carga.", Description = "Método responsavel pesquisar carga por Id")]
+(int cargaId,  IServicoDeAplicacaoCarga servico) =>
+    {
+        var retorno  = servico.SelecionarPorId(cargaId);
+
+        if (retorno!= null)
+            return Results.Ok(retorno);
+         
+        return Results.BadRequest("Carga não encontrada no sistema");
+    });
+
+app.MapPut("/AlterarCargaParaEntradaAutorizada",
+[SwaggerOperation(Summary = "Autorizar abrir cancela carga.", Description = "Método responsável por marcar como cancela de entrada ok")]
+(int cargaId, string NomePorteiroEntrada, int CancelaEntrada,  IServicoDeAplicacaoCarga servico) =>
+    {
+        var ok = servico.AlterarCargaParaEntradaAutorizada(cargaId,NomePorteiroEntrada,CancelaEntrada);
+
+        if (ok)
+            return Results.Ok("Carga altorizada para entrar");
+         
+        return Results.BadRequest("Carga não autorizada");
+    });
+
+//app.MapPost("/CadastrarEmpresa",
+//[SwaggerOperation(Summary = "Cadastrar Empresa.", Description = "Método responsavel por cadastrar nova empresa")]
+//(EmpresaModel empresa, IServicoDeAplicacaoEmpresa servico) =>
+//    {
+//        empresa = servico.Cadastrar(empresa);
+
+//        if (empresa != null)
+//            return Results.Ok(empresa);
+
+//        return Results.BadRequest("Erro ao cadastrar");
+//    });
+
+//app.MapPost("/CadastrarEmpresa",
+//[SwaggerOperation(Summary = "Cadastrar Empresa.", Description = "Método responsavel por cadastrar nova empresa")]
+//(EmpresaModel empresa, IServicoDeAplicacaoEmpresa servico) =>
+//    {
+//        empresa = servico.Cadastrar(empresa);
+
+//        if (empresa != null)
+//            return Results.Ok(empresa);
+
+//        return Results.BadRequest("Erro ao cadastrar");
+//    });
+
+//app.MapPost("/CadastrarEmpresa",
+//[SwaggerOperation(Summary = "Cadastrar Empresa.", Description = "Método responsavel por cadastrar nova empresa")]
+//(EmpresaModel empresa, IServicoDeAplicacaoEmpresa servico) =>
+//    {
+//        empresa = servico.Cadastrar(empresa);
+
+//        if (empresa != null)
+//            return Results.Ok(empresa);
+
+//        return Results.BadRequest("Erro ao cadastrar");
+//    });
+
+//app.MapGet("/GetByName", (string nome, IServicoDeAplicacaoEmpresa servico) =>
+//{
+
+
+//    return new OkObjectResult(servico.Recuperar(c => c.NomeFantasia.Contains(nome)));
+
+//});
+
+//app.MapDelete("/Excluir", (int Id, IServicoDeAplicacaoEmpresa servico) =>
+//{
+
+
+//    return new OkObjectResult(servico.Excluir(Id));
+
+//});
+
+//app.MapPost("/security/create",
+//        [SwaggerOperation(Summary = "Criar uauário.", Description = "Método responsavel por criar usuário")]
+//[ProducesResponseType(typeof(object), StatusCodes.Status200OK)]
+//[ProducesResponseType(typeof(object), StatusCodes.Status400BadRequest)]
+//[ProducesResponseType(typeof(object), StatusCodes.Status500InternalServerError)]
+//async (string teste) =>
+//        {
+//            using (LogContext.PushProperty("Controller", "UserController"))
+//            using (LogContext.PushProperty("Payload", JsonConvert.SerializeObject(teste)))
+//            using (LogContext.PushProperty("Metodo", "Create"))
+//            {
+//                return await Task.FromResult(new OkObjectResult("ok"));
+//            }
+//        });
 
 app.Run();

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace MinimalAPiNet6.Models;
 
@@ -12,5 +13,6 @@ public class ArmazemModel : _ModelBase
     public int HoraInicioDeRecebimentoDeCarga { get; set; } = 9;
     public int HoraFinalDeRecebimentoDeCarga { get; set; } = 19;
 
+    [JsonIgnore]
     public ICollection <CargaModel>? Cargas { get; set; }
 }

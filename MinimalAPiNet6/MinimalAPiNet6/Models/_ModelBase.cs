@@ -7,5 +7,5 @@ public abstract class _ModelBase
 { 
     public int Id { get; set; }
     public DateTime DataDeCadastro { get; set; }
-    public DateTime DataDeAlteracao { get; set; } 
+    public DateTime? DataDeAlteracao { get; set; } 
 }

@@ -106,3 +106,5 @@ C:\Users\JOAO\Desktop\MinimalApi\MinimalAPiNet6\MinimalAPiNet6\obj\Debug\net6.0\
 C:\Users\JOAO\Desktop\MinimalApi\MinimalAPiNet6\MinimalAPiNet6\obj\Debug\net6.0\MinimalAPiNet6.pdb
 C:\Users\JOAO\Desktop\MinimalApi\MinimalAPiNet6\MinimalAPiNet6\obj\Debug\net6.0\MinimalAPiNet6.genruntimeconfig.cache
 C:\Users\JOAO\Desktop\MinimalApi\MinimalAPiNet6\MinimalAPiNet6\obj\Debug\net6.0\ref\MinimalAPiNet6.dll
+C:\Users\JOAO\Desktop\MinimalApi\MinimalAPiNet6\MinimalAPiNet6\bin\Debug\net6.0\MinimalAPiNet6.xml
+C:\Users\JOAO\Desktop\MinimalApi\MinimalAPiNet6\MinimalAPiNet6\obj\Debug\net6.0\MinimalAPiNet6.xml
