@@ -1,5 +1,6 @@
-﻿ 
-using MinimalAPiNet6.ServicosDeAplicacao.Interfaces; 
+﻿using MinimalAPiNet6.Data;
+using MinimalAPiNet6.ServicosDeAplicacao.Interfaces;
+using MinimalAPiNet6.ServicosDeRepositorio.Interfaces;
 using MinimalAPiNet6.ServicosDeRepositorio.Repositorios;
 using System.Linq.Expressions;
 
@@ -8,11 +9,11 @@ namespace MinimalAPiNet6.ServicosDeAplicacao.ServicosDeAplicacao;
 
 public class _ServicoDeAplicacaoBase<T> : _IServicosDeAplicacaoBase<T>, IDisposable where T : class
 {
-    protected RepositorioBase<T> _RepositorioBase;
-
-    public _ServicoDeAplicacaoBase()
-    {
-
+    private readonly _RepositorioBase<T> _RepositorioBase;
+     
+    public _ServicoDeAplicacaoBase(Contexto contexto)
+    {   
+        _RepositorioBase = new _RepositorioBase<T>(contexto) ; 
     }
 
     public void Dispose()

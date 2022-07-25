@@ -7,11 +7,14 @@ namespace MinimalAPiNet6.Data;
 public class Contexto : DbContext
 {
 
+     
+
     public Contexto(DbContextOptions<Contexto> options) : base(options)
     {
         Database.EnsureCreated();
 
     }
+    
     public DbSet<EmpresaModel> Empresas { get; set; }
     public DbSet<ArmazemModel> Armazens { get; set; }
     public DbSet<CargaModel> Cargas { get; set; }
