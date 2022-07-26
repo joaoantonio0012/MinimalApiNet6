@@ -18,13 +18,14 @@ using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
+//ConnectionString
 var conn = builder.Configuration.GetConnectionString("DefautConnectionString");
 
+#region Injeção de dependencias
+
+
 builder.Services.AddDbContext<Contexto>(option => option.UseSqlite(conn));
-
 builder.Services.AddEndpointsApiExplorer();
-
-
 
 builder.Services.AddScoped(serviceType: typeof(_IRepositorioBase<>), implementationType: typeof(_RepositorioBase<>));
 builder.Services.AddScoped<IRepositorioEmpresa, RepositorioEmpresa>();
@@ -58,7 +59,9 @@ var app = builder.Build();
 app.UseSwagger();
 app.UseSwaggerUI();
 
+#endregion
 // Minimal APi Metodos endpoints
+#region Metodos minimal api 
 
 
 app.MapPost("/CadastrarEmpresa",
@@ -99,105 +102,62 @@ app.MapPost("/CadastrarCarga",
 
 app.MapGet("/ConferirCargaNaEntradaDoArmazem",
 [SwaggerOperation(Summary = "Localizar Carga.", Description = "Método responsavel por verificar existencia de carga cadastrada no sistema")]
-(string placa, string cpfcnpjMotorista, int tipoDeCarga,  IServicoDeAplicacaoCarga servico) =>
+(string placa, string cpfcnpjMotorista, int tipoDeCarga, IServicoDeAplicacaoCarga servico) =>
     {
-        var retorno  = servico.Recuperar(c => c.Placa.Equals(placa) && c.CpfMotorista.Equals(cpfcnpjMotorista) && c.TipoDeCarga.Equals(tipoDeCarga)  ).FirstOrDefault();
+        var retorno = servico.Recuperar(c => c.Placa.Equals(placa) && c.CpfMotorista.Equals(cpfcnpjMotorista) && c.TipoDeCarga.Equals(tipoDeCarga)).FirstOrDefault();
 
-        if (retorno!= null)
+        if (retorno != null)
             return Results.Ok(retorno);
-         
+
         return Results.BadRequest("Carga não encontrada no sistema");
     });
 
 app.MapGet("/GetCarga",
 [SwaggerOperation(Summary = "Localizar Carga.", Description = "Método responsavel pesquisar carga por Id")]
-(int cargaId,  IServicoDeAplicacaoCarga servico) =>
+(int cargaId, IServicoDeAplicacaoCarga servico) =>
     {
-        var retorno  = servico.SelecionarPorId(cargaId);
+        var retorno = servico.SelecionarPorId(cargaId);
 
-        if (retorno!= null)
+        if (retorno != null)
             return Results.Ok(retorno);
-         
+
         return Results.BadRequest("Carga não encontrada no sistema");
     });
 
 app.MapPut("/AlterarCargaParaEntradaAutorizada",
-[SwaggerOperation(Summary = "Autorizar abrir cancela carga.", Description = "Método responsável por marcar como cancela de entrada ok")]
-(int cargaId, string NomePorteiroEntrada, int CancelaEntrada,  IServicoDeAplicacaoCarga servico) =>
+[SwaggerOperation(Summary = "Autorizar abrir cancela de entrada.", Description = "Método responsável por marcar como cancela de entrada ok")]
+(int cargaId, string NomePorteiroEntrada, int CancelaEntrada, IServicoDeAplicacaoCarga servico) =>
     {
-        var ok = servico.AlterarCargaParaEntradaAutorizada(cargaId,NomePorteiroEntrada,CancelaEntrada);
+        var ok = servico.AlterarCargaParaEntradaAutorizada(cargaId, NomePorteiroEntrada, CancelaEntrada);
 
         if (ok)
-            return Results.Ok("Carga altorizada para entrar");
-         
+            return Results.Ok("Carga autorizada para entrar");
+
         return Results.BadRequest("Carga não autorizada");
     });
 
-//app.MapPost("/CadastrarEmpresa",
-//[SwaggerOperation(Summary = "Cadastrar Empresa.", Description = "Método responsavel por cadastrar nova empresa")]
-//(EmpresaModel empresa, IServicoDeAplicacaoEmpresa servico) =>
-//    {
-//        empresa = servico.Cadastrar(empresa);
 
-//        if (empresa != null)
-//            return Results.Ok(empresa);
+app.MapPut("/AlterarCargaParaSaidaAutorizada",
+[SwaggerOperation(Summary = "Autorizar abrir cancela de saída.", Description = "Método responsável por marcar como cancela de saída ok e atualizar tempo de descarga")]
+(int cargaId, string NomePorteiroSaida, int CancelaSaida, IServicoDeAplicacaoCarga servico) =>
+    {
+        var ok = servico.AlterarCargaParaSaidaAutorizada(cargaId, NomePorteiroSaida, CancelaSaida);
 
-//        return Results.BadRequest("Erro ao cadastrar");
-//    });
+        if (ok)
+            return Results.Ok("Carga autorizada para sair");
 
-//app.MapPost("/CadastrarEmpresa",
-//[SwaggerOperation(Summary = "Cadastrar Empresa.", Description = "Método responsavel por cadastrar nova empresa")]
-//(EmpresaModel empresa, IServicoDeAplicacaoEmpresa servico) =>
-//    {
-//        empresa = servico.Cadastrar(empresa);
+        return Results.BadRequest("Carga não autorizada");
+    });
 
-//        if (empresa != null)
-//            return Results.Ok(empresa);
+app.MapGet("/TempoMedioDeDescargaPorArmazemId",
+[SwaggerOperation(Summary = "Retorna tempo medio de descarga.", Description = "Método responsável por retornar tempo medio de descarga de determinado armazém")]
+(int armazemId, IServicoDeAplicacaoArmazem servico) =>
+    {
+        var tempoMedio = servico.TempoMedioDeDescargaPorArmazemId(armazemId);
 
-//        return Results.BadRequest("Erro ao cadastrar");
-//    });
+        return Results.Ok(tempoMedio != 0 ? $"Tempo medio para descarga {tempoMedio} horas" : "Armazem não contém cargas finalizadas no momento");
 
-//app.MapPost("/CadastrarEmpresa",
-//[SwaggerOperation(Summary = "Cadastrar Empresa.", Description = "Método responsavel por cadastrar nova empresa")]
-//(EmpresaModel empresa, IServicoDeAplicacaoEmpresa servico) =>
-//    {
-//        empresa = servico.Cadastrar(empresa);
+    });
 
-//        if (empresa != null)
-//            return Results.Ok(empresa);
-
-//        return Results.BadRequest("Erro ao cadastrar");
-//    });
-
-//app.MapGet("/GetByName", (string nome, IServicoDeAplicacaoEmpresa servico) =>
-//{
-
-
-//    return new OkObjectResult(servico.Recuperar(c => c.NomeFantasia.Contains(nome)));
-
-//});
-
-//app.MapDelete("/Excluir", (int Id, IServicoDeAplicacaoEmpresa servico) =>
-//{
-
-
-//    return new OkObjectResult(servico.Excluir(Id));
-
-//});
-
-//app.MapPost("/security/create",
-//        [SwaggerOperation(Summary = "Criar uauário.", Description = "Método responsavel por criar usuário")]
-//[ProducesResponseType(typeof(object), StatusCodes.Status200OK)]
-//[ProducesResponseType(typeof(object), StatusCodes.Status400BadRequest)]
-//[ProducesResponseType(typeof(object), StatusCodes.Status500InternalServerError)]
-//async (string teste) =>
-//        {
-//            using (LogContext.PushProperty("Controller", "UserController"))
-//            using (LogContext.PushProperty("Payload", JsonConvert.SerializeObject(teste)))
-//            using (LogContext.PushProperty("Metodo", "Create"))
-//            {
-//                return await Task.FromResult(new OkObjectResult("ok"));
-//            }
-//        });
-
+#endregion 
 app.Run();

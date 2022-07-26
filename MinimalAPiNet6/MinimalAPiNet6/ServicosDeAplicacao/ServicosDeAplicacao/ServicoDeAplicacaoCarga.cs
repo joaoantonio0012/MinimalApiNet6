@@ -40,4 +40,28 @@ public class ServicoDeAplicacaoCarga : _ServicoDeAplicacaoBase<CargaModel>, ISer
 
         return false;
     }
+    public bool AlterarCargaParaSaidaAutorizada(int cargaId, string NomePorteiroSaida, int CancelaSaida)
+    {
+        if (cargaId == 0)
+            return false;
+         
+        var carga = SelecionarPorId(cargaId);
+ 
+        if (carga != null)
+            if (CargaValidaParaEntradaAltorizada(carga))
+            {
+                carga.CancelaSaida = CancelaSaida;
+                carga.NomePorteiroSaida = NomePorteiroSaida;
+                carga.DataDeAlteracao = DateTime.UtcNow;
+                carga.DataEHoraDeSaida = DateTime.UtcNow;
+
+                var tempo =   DateTime.UtcNow.Subtract(carga.DataEHoraDeChegada.Value);
+                carga.TempoDePermanenciaDentroDoArmazem = tempo.Hours.ToString();
+
+                Alterar(carga);
+                return true;
+            }
+
+        return false;
+    }
 }
