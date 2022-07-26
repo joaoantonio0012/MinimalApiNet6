@@ -5,9 +5,10 @@ namespace MinimalAPiNet6.ServicosDeAplicacao.ServicosDeAplicacao;
 
 public class ServicoDeAplicacaoCarga : _ServicoDeAplicacaoBase<CargaModel>, IServicoDeAplicacaoCarga
 {
+ 
     public ServicoDeAplicacaoCarga(Contexto contexto) : base(contexto)
     {
-
+  
     }
     public bool CargaValidaParaEntradaAltorizada(CargaModel carga)
     {
@@ -33,7 +34,6 @@ public class ServicoDeAplicacaoCarga : _ServicoDeAplicacaoBase<CargaModel>, ISer
                 carga.NomePorteiroEntrada = nomePorteiro;
                 carga.DataDeAlteracao = DateTime.UtcNow;
                 carga.DataEHoraDeChegada = DateTime.UtcNow;
-
                 Alterar(carga);
                 return true;
             }

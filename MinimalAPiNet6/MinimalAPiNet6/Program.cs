@@ -1,20 +1,12 @@
-using Microsoft.AspNetCore.Cors;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
-
 using MinimalAPiNet6.Data;
 using MinimalAPiNet6.Models;
 using MinimalAPiNet6.ServicosDeAplicacao.Interfaces;
 using MinimalAPiNet6.ServicosDeAplicacao.ServicosDeAplicacao;
 using MinimalAPiNet6.ServicosDeRepositorio.Interfaces;
 using MinimalAPiNet6.ServicosDeRepositorio.Repositorios;
-using Newtonsoft.Json;
-using Serilog.Context;
-using Swashbuckle.AspNetCore;
 using Swashbuckle.AspNetCore.Annotations;
-using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -62,8 +54,6 @@ app.UseSwaggerUI();
 #endregion
 // Minimal APi Metodos endpoints
 #region Metodos minimal api 
-
-
 app.MapPost("/CadastrarEmpresa",
 [SwaggerOperation(Summary = "Cadastrar Empresa.", Description = "Método responsavel por cadastrar nova empresa")]
 (EmpresaModel empresa, IServicoDeAplicacaoEmpresa servico) =>
@@ -101,7 +91,7 @@ app.MapPost("/CadastrarCarga",
     });
 
 app.MapGet("/ConferirCargaNaEntradaDoArmazem",
-[SwaggerOperation(Summary = "Localizar Carga.", Description = "Método responsavel por verificar existencia de carga cadastrada no sistema")]
+[SwaggerOperation(Summary = "Conferir Carga.", Description = "Método responsavel por verificar existencia de carga cadastrada no sistema")]
 (string placa, string cpfcnpjMotorista, int tipoDeCarga, IServicoDeAplicacaoCarga servico) =>
     {
         var retorno = servico.Recuperar(c => c.Placa.Equals(placa) && c.CpfMotorista.Equals(cpfcnpjMotorista) && c.TipoDeCarga.Equals(tipoDeCarga)).FirstOrDefault();
@@ -124,6 +114,16 @@ app.MapGet("/GetCarga",
         return Results.BadRequest("Carga não encontrada no sistema");
     });
 
+app.MapGet("/TempoMedioDeDescargaPorArmazemId",
+[SwaggerOperation(Summary = "Retorna tempo medio de descarga.", Description = "Método responsável por retornar tempo medio de descarga de determinado armazém")]
+(int armazemId, IServicoDeAplicacaoArmazem servico) =>
+    {
+        var tempoMedio = servico.TempoMedioDeDescargaPorArmazemId(armazemId);
+
+        return Results.Ok(tempoMedio != 0 ? $"Tempo medio para descarga {tempoMedio} horas" : "Armazem não contém cargas finalizadas no momento");
+
+    });
+
 app.MapPut("/AlterarCargaParaEntradaAutorizada",
 [SwaggerOperation(Summary = "Autorizar abrir cancela de entrada.", Description = "Método responsável por marcar como cancela de entrada ok")]
 (int cargaId, string NomePorteiroEntrada, int CancelaEntrada, IServicoDeAplicacaoCarga servico) =>
@@ -134,8 +134,7 @@ app.MapPut("/AlterarCargaParaEntradaAutorizada",
             return Results.Ok("Carga autorizada para entrar");
 
         return Results.BadRequest("Carga não autorizada");
-    });
-
+    }); 
 
 app.MapPut("/AlterarCargaParaSaidaAutorizada",
 [SwaggerOperation(Summary = "Autorizar abrir cancela de saída.", Description = "Método responsável por marcar como cancela de saída ok e atualizar tempo de descarga")]
@@ -149,15 +148,18 @@ app.MapPut("/AlterarCargaParaSaidaAutorizada",
         return Results.BadRequest("Carga não autorizada");
     });
 
-app.MapGet("/TempoMedioDeDescargaPorArmazemId",
-[SwaggerOperation(Summary = "Retorna tempo medio de descarga.", Description = "Método responsável por retornar tempo medio de descarga de determinado armazém")]
-(int armazemId, IServicoDeAplicacaoArmazem servico) =>
+app.MapPut("/AlterarUnidadesDeArmazenagemArmazem",
+[SwaggerOperation(Summary = "Altera quantidade de unidades de armazenamento ultilizadas.", Description = "Método responsável por alterar quantidade de unidades ultilizadas em determinado armazém")]
+(int armazemId, int unidades, IServicoDeAplicacaoArmazem servico) =>
     {
-        var tempoMedio = servico.TempoMedioDeDescargaPorArmazemId(armazemId);
+        var ok = servico.DiminuirUnidadesDeArmazenamento(armazemId, unidades);
 
-        return Results.Ok(tempoMedio != 0 ? $"Tempo medio para descarga {tempoMedio} horas" : "Armazem não contém cargas finalizadas no momento");
+        if (ok)
+            return Results.Ok("Unidades Diminuidas com sucesso!");
 
+        return Results.BadRequest("Erro ao diminuir unidades!");
     });
+
 
 #endregion 
 app.Run();

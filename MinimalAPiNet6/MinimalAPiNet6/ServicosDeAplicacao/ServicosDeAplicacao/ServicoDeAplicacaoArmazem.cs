@@ -28,4 +28,18 @@ public class ServicoDeAplicacaoArmazem : _ServicoDeAplicacaoBase<ArmazemModel>, 
 
         return tempoMedio;
     }
+    public bool DiminuirUnidadesDeArmazenamento(int armazemId, int unidades)
+    {
+        var armazem = SelecionarPorId(armazemId);
+
+        if(armazem!=null)
+        {
+            armazem.UnidadesDeArmazenamentoOcupadas += unidades;
+            Alterar(armazem);
+            if (armazem != null)
+                return true;
+        }
+
+        return false;
+    }
 }
