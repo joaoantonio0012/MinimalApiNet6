@@ -13,8 +13,7 @@ var builder = WebApplication.CreateBuilder(args);
 //ConnectionString
 var conn = builder.Configuration.GetConnectionString("DefautConnectionString");
 
-#region Injeção de dependencias
-
+#region Injeção de dependencias 
 
 builder.Services.AddDbContext<Contexto>(option => option.UseSqlite(conn));
 builder.Services.AddEndpointsApiExplorer();
@@ -47,6 +46,7 @@ builder.Services.AddSwaggerGen(c =>
 
     c.EnableAnnotations();
 });
+
 var app = builder.Build();
 app.UseSwagger();
 app.UseSwaggerUI();
@@ -159,7 +159,6 @@ app.MapPut("/AlterarUnidadesDeArmazenagemArmazem",
 
         return Results.BadRequest("Erro ao diminuir unidades!");
     });
-
-
+ 
 #endregion 
 app.Run();
